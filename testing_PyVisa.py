@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import csv
 from time import sleep
-site = "Site7"
+site = "Site8"
 dut = "DUT4"
 rm = pyvisa.ResourceManager()
 
