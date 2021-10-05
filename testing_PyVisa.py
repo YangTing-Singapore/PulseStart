@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import csv
 from time import sleep
-site = "Site12"
+site = "Site16"
 dut = "DUT4"
 rm = pyvisa.ResourceManager()
 
@@ -13,7 +13,7 @@ tds = rm.open_resource("GPIB0::6::INSTR")
 
 # def oscilloscope():
 tds.write(":CH1:SCA 500E-3")
-tds.write(":CH2:SCA 1")
+tds.write(":CH2:SCA 500E-3")
 tds.write(":CH3:SCA 500E-3")
 tds.write(":CH4:SCA 2E-3")
 tds.write(":CH1:POS 0")
@@ -34,7 +34,7 @@ tds.write(":CH3:YUN 'V'")
 tds.write(":CH4:YUN 'A'")
 tds.write(":CH1:PRO 1E0")
 tds.write(":CH2:PRO 1E1")
-tds.write(":CH3:PRO 1E0")
+tds.write(":CH3:PRO 1E1")
 tds.write(":CH4:PRO 2E-1")
 
 tds.write(":HORIZONTAL:MAIN:SCALE 0.4E-6")
@@ -104,7 +104,7 @@ ch3_data = Convert(curve_ch3[0])
 ch4_data = Convert(curve_ch4[0])
 
 dataframe = pd.DataFrame(list(zip(ch1_data, ch2_data, ch3_data, ch4_data)), columns=["CH1", "CH2", "CH3", "CH4"])
-fileName2 = "{}\{}\PostProgramming_1.1V_Vd700_{}.csv".format(site, dut, dut)
+fileName2 = "{}\{}\PostProgramming_Vg1.1V_Vd1.8v{}.csv".format(site, dut, dut)
 dataframe.to_csv(fileName2)
 
 print(dataframe)
