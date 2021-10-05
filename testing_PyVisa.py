@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import csv
 from time import sleep
-site = "Site11"
+site = "Site12"
 dut = "DUT4"
 rm = pyvisa.ResourceManager()
 
@@ -33,7 +33,7 @@ tds.write(":CH2:YUN 'V'")
 tds.write(":CH3:YUN 'V'")
 tds.write(":CH4:YUN 'A'")
 tds.write(":CH1:PRO 1E0")
-tds.write(":CH2:PRO 1E0")
+tds.write(":CH2:PRO 1E1")
 tds.write(":CH3:PRO 1E0")
 tds.write(":CH4:PRO 2E-1")
 

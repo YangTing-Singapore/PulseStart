@@ -5,11 +5,11 @@
 3,BN_FMT RP
 4,BYT_OR MSB
 5,NR_PT 10000
-6,"WFID ""Ch1, DC coupling, 5.0E-1 V/div, 4.0E-7 s/div, 10000 points, Sample mode"""
+6,"WFID ""Ch1, DC coupling, 5.0E-1 V/div, 1.0E-4 s/div, 10000 points, Sample mode"""
 7,PT_FMT Y
-8,XINCR 4.0E-10
+8,XINCR 1.0E-7
 9,PT_OFF 0
-10,XZERO -1.0E-6
+10,XZERO -4.96E-4
 11,"XUNIT ""s"""
 12,YMULT 7.8125E-5
 13,YZERO 0.0E0
