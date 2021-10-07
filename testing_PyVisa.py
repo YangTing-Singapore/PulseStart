@@ -4,17 +4,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import csv
 from time import sleep
-site = "Site16"
-dut = "DUT4"
+site = "Try"
+dut = "DUT9"
 rm = pyvisa.ResourceManager()
 
 hp_pulse = rm.open_resource("GPIB0::10::INSTR")
 tds = rm.open_resource("GPIB0::6::INSTR")
 
 # def oscilloscope():
-tds.write(":CH1:SCA 500E-3")
-tds.write(":CH2:SCA 500E-3")
-tds.write(":CH3:SCA 500E-3")
+tds.write(":CH1:SCA 1")
+tds.write(":CH2:SCA 1")
+tds.write(":CH3:SCA 1")
 tds.write(":CH4:SCA 2E-3")
 tds.write(":CH1:POS 0")
 tds.write(":CH2:POS 0")
@@ -23,7 +23,7 @@ tds.write(":CH4:POS 0")
 tds.write(":CH1:IMP FIF")
 tds.write(":CH2:IMP MEG")
 tds.write(":CH3:IMP MEG")
-tds.write(":CH4:IMP FIF")
+tds.write(":CH4:IMP MEG")
 tds.write(":CH1:COUP DC")
 tds.write(":CH2:COUP DC")
 tds.write(":CH3:COUP DC")
@@ -37,20 +37,21 @@ tds.write(":CH2:PRO 1E1")
 tds.write(":CH3:PRO 1E1")
 tds.write(":CH4:PRO 2E-1")
 
-tds.write(":HORIZONTAL:MAIN:SCALE 0.4E-6")
-tds.write("HOR:DEL:TIM 1e-6")
+tds.write(":HORIZONTAL:MAIN:SCALE 400E-6")
+tds.write("HOR:DEL:TIM 800e-6")
 tds.write(":FPA:PRESS SINGLESEQ")
 
 sleep(1)
 
 print(hp_pulse.query(":SYST:ERR?"))
+print(tds.query(":EVMSG?"))
 
 hp_pulse.write(":PULS:PER 12US")
 hp_pulse.write(":PULS:WIDT1 6US")
 hp_pulse.write(":PULS:WIDT2 2US")
 hp_pulse.write(":PULS:DEL2 2US")
 
-hp_pulse.write(":VOLT1:HIGH 700MV")
+hp_pulse.write(":VOLT1:HIGH 900MV")
 hp_pulse.write(":VOLT1:LOW 0V")
 hp_pulse.write(":VOLT2:HIGH 1.1V")
 hp_pulse.write(":VOLT2:LOW 0V")
