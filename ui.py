@@ -40,27 +40,36 @@ class Window(QMainWindow):
         widget = QWidget()
 
         # vlayout = QVBoxLayout(widget)
-        vlayout = QVBoxLayout()
+        # vlayout = QVBoxLayout()
+        vlayout_left = QVBoxLayout()
+        vlayout_right = QVBoxLayout()
         hlayout = QHBoxLayout()
 
         a1 = QLabel('label1')
         a2 = QLabel('label2')
 
         tabs = QTabWidget()
-        tabs.addTab(self.generalTabUI(), "General")
-        tabs.addTab(self.networkTabUI(), "Network")
+        tabs.addTab(self.sourcemeterlTabUI(), "2400 SMU")
+        tabs.addTab(self.oscilloscopeTabUI(), "TDS3000C OSC")
 
 
         # hlayout.addWidget(a1)
-        hlayout.addWidget(tabs)
-        hlayout.addWidget(a2)
+        # hlayout.addWidget(tabs)
+        # hlayout.addWidget(a2)
+        # hlayout.addStretch()
+        # vlayout.addLayout(hlayout)
+        # vlayout.addStretch()
+        # widget.setLayout(vlayout)
+
+        vlayout_left.addWidget(tabs)
+        vlayout_right.addWidget(a2)
+        hlayout.addLayout(vlayout_left)
+        hlayout.addLayout(vlayout_right)
         hlayout.addStretch()
-        vlayout.addLayout(hlayout)
-        vlayout.addStretch()
-        widget.setLayout(vlayout)
+        widget.setLayout(hlayout)
         self.setCentralWidget(widget)
 
-    def generalTabUI(self):
+    def sourcemeterlTabUI(self):
         """Create the General page UI."""
         generalTab = QWidget()
         layout = QVBoxLayout()
@@ -72,7 +81,7 @@ class Window(QMainWindow):
 
         return generalTab
 
-    def networkTabUI(self):
+    def oscilloscopeTabUI(self):
         """Create the Network page UI."""
         networkTab = QWidget()
         layout = QVBoxLayout()
