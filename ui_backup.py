@@ -1,8 +1,7 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, 
-QMenuBar, QMenu, QToolBar, QAction, QVBoxLayout, QWidget, QHBoxLayout, QCheckBox, QTabWidget)
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenuBar, QMenu, QToolBar, QAction
 
 class Window(QMainWindow):
     """Main Window."""
@@ -11,77 +10,17 @@ class Window(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("eFuse Programming Current Measurement")
         self.resize(800, 400)
-        # self.centralWidget = QLabel("Hello, World")
-        # self.centralWidget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        # self.setCentralWidget(self.centralWidget)
+        self.centralWidget = QLabel("Hello, World")
+        self.centralWidget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.setCentralWidget(self.centralWidget)
 
-        self.initUI()
         self._createActions()
         self._createMenuBar()
         self._createToolBars()
         self._connectActions()
         self._createStatusBar()
-################################################################
-        # layout = QVBoxLayout()
-        # self.testlabel_1 = QLabel("Hello, World!")
-        # layout.addwidget(self.testlabel_1)
 
-        # layout.addWidget(Color('red'))
-        # layout.addWidget(Color('green'))
-        # layout.addWidget(Color('blue'))
-
-        # widget = QWidget()
-        # widget.setLayout(layout)
-        # self.setCentralWidget(widget)
-######################################################################
         self.show()
-
-    def initUI(self):
-        widget = QWidget()
-
-        # vlayout = QVBoxLayout(widget)
-        vlayout = QVBoxLayout()
-        hlayout = QHBoxLayout()
-
-        a1 = QLabel('label1')
-        a2 = QLabel('label2')
-
-        tabs = QTabWidget()
-        tabs.addTab(self.generalTabUI(), "General")
-        tabs.addTab(self.networkTabUI(), "Network")
-
-
-        # hlayout.addWidget(a1)
-        hlayout.addWidget(tabs)
-        hlayout.addWidget(a2)
-        hlayout.addStretch()
-        vlayout.addLayout(hlayout)
-        vlayout.addStretch()
-        widget.setLayout(vlayout)
-        self.setCentralWidget(widget)
-
-    def generalTabUI(self):
-        """Create the General page UI."""
-        generalTab = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QCheckBox("General Option 1"))
-        layout.addWidget(QCheckBox("General Option 2"))
-        layout.addStretch()
-
-        generalTab.setLayout(layout)
-
-        return generalTab
-
-    def networkTabUI(self):
-        """Create the Network page UI."""
-        networkTab = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QCheckBox("Network Option 1"))
-        layout.addWidget(QCheckBox("Network Option 2"))
-        networkTab.setLayout(layout)
-        layout.addStretch()
-
-        return networkTab
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
