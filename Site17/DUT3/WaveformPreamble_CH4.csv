@@ -1,0 +1,18 @@
+,Waveform_Preamble
+0,BYT_NR 2
+1,BIT_NR 16
+2,ENCDG ASC
+3,BN_FMT RP
+4,BYT_OR MSB
+5,NR_PT 10000
+6,"WFID ""Ch4, DC coupling, 2.0E-3 A/div, 2.0E-6 s/div, 10000 points, Sample mode"""
+7,PT_FMT Y
+8,XINCR 2.0E-9
+9,PT_OFF 0
+10,XZERO -3.0E-6
+11,"XUNIT ""s"""
+12,YMULT 3.125E-7
+13,YZERO 0.0E0
+14,YOFF 0.0E0
+15,"YUNIT ""A""
+"
