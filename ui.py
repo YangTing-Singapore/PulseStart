@@ -21,26 +21,12 @@ class Window(QMainWindow):
         self._createToolBars()
         self._connectActions()
         self._createStatusBar()
-################################################################
-        # layout = QVBoxLayout()
-        # self.testlabel_1 = QLabel("Hello, World!")
-        # layout.addwidget(self.testlabel_1)
 
-        # layout.addWidget(Color('red'))
-        # layout.addWidget(Color('green'))
-        # layout.addWidget(Color('blue'))
-
-        # widget = QWidget()
-        # widget.setLayout(layout)
-        # self.setCentralWidget(widget)
-######################################################################
         self.show()
 
     def initUI(self):
         widget = QWidget()
 
-        # vlayout = QVBoxLayout(widget)
-        # vlayout = QVBoxLayout()
         vlayout_left = QVBoxLayout()
         vlayout_right = QVBoxLayout()
         hlayout = QHBoxLayout()
@@ -51,15 +37,6 @@ class Window(QMainWindow):
         tabs = QTabWidget()
         tabs.addTab(self.sourcemeterlTabUI(), "2400 SMU")
         tabs.addTab(self.oscilloscopeTabUI(), "TDS3000C OSC")
-
-
-        # hlayout.addWidget(a1)
-        # hlayout.addWidget(tabs)
-        # hlayout.addWidget(a2)
-        # hlayout.addStretch()
-        # vlayout.addLayout(hlayout)
-        # vlayout.addStretch()
-        # widget.setLayout(vlayout)
 
         vlayout_left.addWidget(tabs)
         vlayout_right.addWidget(a2)
