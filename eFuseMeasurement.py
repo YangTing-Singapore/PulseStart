@@ -83,11 +83,15 @@ def get_curve(channel):
     fileName = "{}\{}\WaveformPreamble_{}.csv".format(site, dut, channel)
     waveform_preamble_dataframe = pd.DataFrame(list(waveform_preamble[8:].split(";")), columns=["Waveform_Preamble"])
     waveform_preamble_dataframe.to_csv(fileName)
-    y_mult = float(waveform_preamble_dataframe["Waveform_Preamble"][12][6:])
-    nr_pt = float(waveform_preamble_dataframe["Waveform_Preamble"][5][6:])
+    # y_mult = float(waveform_preamble_dataframe["Waveform_Preamble"][12][6:])
+    # nr_pt = float(waveform_preamble_dataframe["Waveform_Preamble"][5][6:])
+    y_mult = tds.query(":WFMP:YMU?")
+    x_zero = tds.query(":WFMP:XZE?")
+    x_interval = tds.query(":WFMP:XIN?")
+    nr_pt = tds.query(":WFMP:NR_P?")
     curve = tds.query(":CURV?")
     curve_slicing = curve[7:-1]
-    return curve_slicing, y_mult, nr_pt
+    return curve_slicing, y_mult, x_zero, x_interval, nr_pt
 
 # Python code to convert string to list
 def Convert(string):
@@ -99,12 +103,13 @@ curve_ch2 = get_curve('CH2')
 curve_ch3 = get_curve('CH3')
 curve_ch4 = get_curve('CH4')
 
+timeFrame = range(curve_ch1[2], curve_ch1[4], curve_ch1[3])
 ch1_data = Convert(curve_ch1[0])
 ch2_data = Convert(curve_ch2[0])
 ch3_data = Convert(curve_ch3[0])
 ch4_data = Convert(curve_ch4[0])
 
-dataframe = pd.DataFrame(list(zip(ch1_data, ch2_data, ch3_data, ch4_data)), columns=["CH1", "CH2", "CH3", "CH4"])
+dataframe = pd.DataFrame(list(zip(timeFrame, ch1_data, ch2_data, ch3_data, ch4_data)), columns=["Time", "CH1", "CH2", "CH3", "CH4"])
 fileName2 = "{}\{}\PostProgramming_Vg1.1V_Vd1.8v{}.csv".format(site, dut, dut)
 dataframe.to_csv(fileName2)
 
