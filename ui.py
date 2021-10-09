@@ -2,7 +2,9 @@ import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, 
-QMenuBar, QMenu, QToolBar, QAction, QVBoxLayout, QWidget, QHBoxLayout, QCheckBox, QTabWidget)
+QMenuBar, QMenu, QToolBar, QAction, QVBoxLayout, QWidget, QHBoxLayout, QCheckBox, QTabWidget, QFormLayout, QGroupBox, QLineEdit)
+
+import formLayout
 
 class Window(QMainWindow):
     """Main Window."""
@@ -10,18 +12,19 @@ class Window(QMainWindow):
         """Initializer."""
         super().__init__(parent)
         self.setWindowTitle("eFuse Programming Current Measurement")
-        self.resize(800, 400)
+        self.resize(1200, 700)
         # self.centralWidget = QLabel("Hello, World")
         # self.centralWidget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         # self.setCentralWidget(self.centralWidget)
-
+        
+        self.tdsCommandGroupBox()
         self.initUI()
         self._createActions()
         self._createMenuBar()
         self._createToolBars()
         self._connectActions()
         self._createStatusBar()
-
+ 
         self.show()
 
     def initUI(self):
@@ -37,6 +40,7 @@ class Window(QMainWindow):
         tabs = QTabWidget()
         tabs.addTab(self.sourcemeterlTabUI(), "2400 SMU")
         tabs.addTab(self.oscilloscopeTabUI(), "TDS3000C OSC")
+        tabs.addTab(self.pulseTabUI(), "HP81130A")
 
         vlayout_left.addWidget(tabs)
         vlayout_right.addWidget(a2)
@@ -47,27 +51,79 @@ class Window(QMainWindow):
         self.setCentralWidget(widget)
 
     def sourcemeterlTabUI(self):
-        """Create the General page UI."""
-        generalTab = QWidget()
+        """Create the Source Meter page UI."""
+        sourcemeterTab = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QCheckBox("General Option 1"))
-        layout.addWidget(QCheckBox("General Option 2"))
+        layout.addWidget(QCheckBox("SMU Option 1"))
+        layout.addWidget(QCheckBox("SMU Option 2"))
         layout.addStretch()
 
-        generalTab.setLayout(layout)
+        sourcemeterTab.setLayout(layout)
 
-        return generalTab
+        return sourcemeterTab
 
     def oscilloscopeTabUI(self):
-        """Create the Network page UI."""
-        networkTab = QWidget()
+        """Create the Oscilloscope page UI."""
+        scopeTab = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QCheckBox("Network Option 1"))
-        layout.addWidget(QCheckBox("Network Option 2"))
-        networkTab.setLayout(layout)
+
+        channelTab = QTabWidget()
+        channelTab.addTab(self.tdsCommandGroupBox(), "CH1")
+        channelTab.addTab(self.tdsCommandGroupBox(), "CH2")
+        channelTab.addTab(self.tdsCommandGroupBox(), "CH3")
+        channelTab.addTab(self.tdsCommandGroupBox(), "CH4")
+
+        layout.addWidget(channelTab)
+        scopeTab.setLayout(layout)
         layout.addStretch()
 
-        return networkTab
+        return scopeTab
+
+    def tdsCommandGroupBox(self):
+        widget = QWidget()
+        vlayout = QVBoxLayout()
+        # Vertical Commands
+        verticalGroupBox = QGroupBox("Vertical Commands")
+        verticalLayout = QFormLayout()
+        verticalLayout.addRow(QLabel("Bandwidth:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Coupling:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Impedance:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Position:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Probe:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Scale:"), QLineEdit())
+        verticalLayout.addRow(QLabel("Unit:"), QLineEdit())
+        # Horizontal Commands
+        horizontalGroupBox = QGroupBox("Horizontal Commands")
+        horizontalLayout = QFormLayout()
+        horizontalLayout.addRow(QLabel("Time per Division:"), QLineEdit())
+        horizontalLayout.addRow(QLabel("Delay:"), QLineEdit())
+        # Waveform Data Commands
+        waveformGroupBox = QGroupBox("Waveform Data")
+        waveformLayout = QFormLayout()
+        waveformLayout.addRow(QLabel("Data Start:"), QLineEdit())
+        waveformLayout.addRow(QLabel("Data Stop:"), QLineEdit())
+
+        verticalGroupBox.setLayout(verticalLayout)
+        horizontalGroupBox.setLayout(horizontalLayout)
+        waveformGroupBox.setLayout(waveformLayout)
+        vlayout.addWidget(verticalGroupBox)
+        vlayout.addWidget(horizontalGroupBox)
+        vlayout.addWidget(waveformGroupBox)
+        widget.setLayout(vlayout)
+
+        return widget
+
+    def pulseTabUI(self):
+        """Create the Pulse page UI."""
+        pulseTab = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(QCheckBox("Pulse Option 1"))
+        layout.addWidget(QCheckBox("Pulse Option 2"))
+        layout.addStretch()
+
+        pulseTab.setLayout(layout)
+
+        return pulseTab
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -137,7 +193,9 @@ class Window(QMainWindow):
 
     def newFile(self):
         # Logic for creating a new file goes here...
-        self.centralWidget.setText("<b>File > New</b> clicked")
+        # self.centralWidget.setText("<b>File > New</b> clicked")
+        form = formLayout.FormDialog()
+        form.exec()
 
     def openFile(self):
         # Logic for opening an existing file goes here...
