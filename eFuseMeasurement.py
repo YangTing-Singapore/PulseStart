@@ -2,19 +2,28 @@ from os import write
 import pyvisa
 import pandas as pd
 import matplotlib.pyplot as plt
-import csv
+import csv, numpy as np
 from time import sleep
 site = "Try"
-dut = "DUT9"
+dut = "DUT14"
 rm = pyvisa.ResourceManager()
 
 hp_pulse = rm.open_resource("GPIB0::10::INSTR")
 tds = rm.open_resource("GPIB0::6::INSTR")
+smu = rm.open_resource("GPIB0::24::INSTR")
+
+smu.write(":SOUR:FUNC VOLT")
+smu.write(":SOUR:VOLT:MODE FIX")
+smu.write(":SOUR:VOLT:RANG 2.1")
+smu.write(":SOUR:VOLT 1.8")
+smu.write(":CURR:PROT 20E-3")
+smu.write(":OUTP 1")
+
 
 # def oscilloscope():
-tds.write(":CH1:SCA 1")
-tds.write(":CH2:SCA 1")
-tds.write(":CH3:SCA 1")
+tds.write(":CH1:SCA 500E-3")
+tds.write(":CH2:SCA 500E-3")
+tds.write(":CH3:SCA 500E-3")
 tds.write(":CH4:SCA 2E-3")
 tds.write(":CH1:POS 0")
 tds.write(":CH2:POS 0")
@@ -37,8 +46,8 @@ tds.write(":CH2:PRO 1E1")
 tds.write(":CH3:PRO 1E1")
 tds.write(":CH4:PRO 2E-1")
 
-tds.write(":HORIZONTAL:MAIN:SCALE 400E-6")
-tds.write("HOR:DEL:TIM 800e-6")
+tds.write(":HORIZONTAL:MAIN:SCALE 2E-6")
+tds.write("HOR:DEL:TIM 7e-6")
 tds.write(":FPA:PRESS SINGLESEQ")
 
 sleep(1)
@@ -61,7 +70,7 @@ hp_pulse.write(":ARM:MODE STAR")
 hp_pulse.write(":ARM:SENS POS")
 
 # Step: Turn on the HP Pulse Generator output 1 and 2
-hp_pulse.write(":OUTP1 1")
+hp_pulse.write(":OUTP1 0")
 hp_pulse.write(":OUTP2 1")
 
 hp_pulse.write(":TRIG:COUN 2")
@@ -85,10 +94,10 @@ def get_curve(channel):
     waveform_preamble_dataframe.to_csv(fileName)
     # y_mult = float(waveform_preamble_dataframe["Waveform_Preamble"][12][6:])
     # nr_pt = float(waveform_preamble_dataframe["Waveform_Preamble"][5][6:])
-    y_mult = tds.query(":WFMP:YMU?")
-    x_zero = tds.query(":WFMP:XZE?")
-    x_interval = tds.query(":WFMP:XIN?")
-    nr_pt = tds.query(":WFMP:NR_P?")
+    y_mult = float(tds.query(":WFMP:YMU?")[14:-1])
+    x_zero = float(tds.query(":WFMP:XZE?")[14:-1])
+    x_interval = float(tds.query(":WFMP:XIN?")[14:-1])
+    nr_pt = float(tds.query(":WFMP:NR_P?")[14:-1])
     curve = tds.query(":CURV?")
     curve_slicing = curve[7:-1]
     return curve_slicing, y_mult, x_zero, x_interval, nr_pt
@@ -103,14 +112,21 @@ curve_ch2 = get_curve('CH2')
 curve_ch3 = get_curve('CH3')
 curve_ch4 = get_curve('CH4')
 
-timeFrame = range(curve_ch1[2], curve_ch1[4], curve_ch1[3])
+# timeFrame = np.arange(curve_ch1[2], curve_ch1[4], curve_ch1[3])
+# print(curve_ch1[1])
+# print(curve_ch1[2])
+print("Time interver: ", curve_ch1[3])
+# print(curve_ch1[4])
 ch1_data = Convert(curve_ch1[0])
 ch2_data = Convert(curve_ch2[0])
 ch3_data = Convert(curve_ch3[0])
 ch4_data = Convert(curve_ch4[0])
 
-dataframe = pd.DataFrame(list(zip(timeFrame, ch1_data, ch2_data, ch3_data, ch4_data)), columns=["Time", "CH1", "CH2", "CH3", "CH4"])
+dataframe = pd.DataFrame(list(zip(ch1_data, ch2_data, ch3_data, ch4_data)), columns=["CH1", "CH2", "CH3", "CH4"])
 fileName2 = "{}\{}\PostProgramming_Vg1.1V_Vd1.8v{}.csv".format(site, dut, dut)
 dataframe.to_csv(fileName2)
 
 print(dataframe)
+
+smu.write(":OUTP OFF")
+hp_pulse.write(":OUTP2 0")
